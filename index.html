@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[함백고등학교] 2026 교과연계 프로그램 디지털 제안서 - 투어메이커</title>
+    
+    <!-- Google tag (gtag.js) - 투어메이커 기본 GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JLH9GD9SVR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JLH9GD9SVR');
+    </script>
+
+    <!-- SEO & Open Graph (카톡 전송용 썸네일) -->
+    <meta name="description" content="함백고등학교 교과연계 프로그램 성공적인 운영을 위한 투어메이커의 2가지 맞춤 제안서입니다.">
+    <meta property="og:title" content="📝 [함백고] 교과연계 프로그램 제안서">
+    <meta property="og:description" content="1박 2일 프리미엄 vs 2박 3일 실속형 일정 제안">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&q=80&w=1200&h=630">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Fonts: 제안서에 맞게 신뢰감 있는 Noto Sans 중심 사용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .hero-bg { 
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        @media (max-width: 768px){ .hero-bg { background-attachment: scroll; } }
+        #map { height: 450px; width: 100%; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        section { scroll-margin-top: 64px; }
+        
+        .custom-icon div {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .custom-icon div:hover { transform: scale(1.15); z-index: 100; }
+        
+        /* 탭 버튼 스타일 */
+        .tab-btn.active { background-color: #1e40af; color: white; border-color: #1e40af; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 화면에만 보이고 인쇄할 때는 숨겨지는 메인 래퍼 -->
+    <div class="print:hidden pb-20 md:pb-0">
+
+    <!-- Header -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200">
+        <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 shrink-0">
+                <a href="http://tourmaker.kr" target="_blank">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-7">
+                </a>
+                <span class="bg-slate-800 text-white text-[10px] px-2 py-0.5 rounded font-bold tracking-wider">PROPOSAL</span>
+            </div>
+            
+            <div class="flex-1 overflow-x-auto no-scrollbar ml-4 md:ml-8">
+                <div class="flex items-center space-x-2 md:space-x-6 whitespace-nowrap pr-4">
+                    <a href="#home" class="px-2 py-2 text-sm font-bold text-slate-700 hover:text-blue-700 transition-colors">개요</a>
+                    <a href="#compare" class="px-2 py-2 text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors">플랜비교</a>
+                    <a href="#schedule" class="px-2 py-2 text-sm font-bold text-slate-700 hover:text-blue-700 transition-colors">상세일정</a>
+                    <a href="#map-section" class="px-2 py-2 text-sm font-bold text-slate-700 hover:text-blue-700 transition-colors">동선지도</a>
+                    <a href="#video" class="px-2 py-2 text-sm font-bold text-slate-700 hover:text-blue-700 transition-colors">참고자료</a>
+                </div>
+            </div>
+
+            <button onclick="shareLink()" class="shrink-0 text-slate-500 hover:text-blue-700 ml-2" title="제안서 링크 공유">
+                <i class="fa-solid fa-share-nodes text-lg"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-[50vh] flex items-center justify-center text-center px-4">
+        <div class="animate-fade-in-up text-white max-w-3xl">
+            <span class="text-blue-300 font-bold tracking-widest text-sm mb-4 block">2026 교과연계 프로그램 제안서</span>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">함백고등학교 학생들을 위한<br><span class="text-white">최적의 문화예술 탐방</span></h1>
+            <p class="text-lg md:text-xl text-slate-200 font-medium mb-8">안전은 기본, 교육적 가치와 학생들의 만족도를 모두 충족하는<br class="hidden md:block">투어메이커의 2가지 맞춤 솔루션을 제안합니다.</p>
+            <div class="flex justify-center gap-4">
+                <a href="#compare" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition shadow-lg">제안 비교보기</a>
+                <button onclick="window.print()" class="bg-white/20 hover:bg-white/30 backdrop-blur text-white px-6 py-3 rounded-lg font-bold transition border border-white/30"><i class="fa-solid fa-print mr-2"></i>비교표 인쇄</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compare Section (제안 핵심) -->
+    <section id="compare" class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">선택형 제안 개요</h2>
+                <p class="text-slate-600 mt-3 max-w-2xl mx-auto">예산과 교육 목적에 맞춰 선택하실 수 있도록, 압축적인 <strong class="text-blue-700">고급형 1박 2일</strong> 일정과 심도 있는 <strong class="text-emerald-700">가성비 역사 2박 3일</strong> 일정을 준비했습니다.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Plan A -->
+                <div class="bg-white rounded-2xl p-8 border-t-4 border-blue-600 shadow-lg hover:shadow-xl transition relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-bl-lg">시간 효율 극대화</div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-gem"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Plan A. 1박 2일</h3>
+                            <p class="text-blue-600 font-bold text-sm mt-1">프리미엄 문화·예술 집중형</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6 min-h-[60px]">짧은 일정 속에 샤롯데씨어터 대형 뮤지컬과 아쿠아리움 등 높은 수준의 문화 체험을 압축적으로 담은 하이엔드 일정입니다.</p>
+                    <ul class="space-y-3 mb-8 text-sm text-slate-700">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>주요코스:</strong> 예술의전당, 롯데아쿠아리움, 롯데월드</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>특별체험:</strong> 샤롯데씨어터 대극장 뮤지컬 관람</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(잠실점) 석식 제공</li>
+                    </ul>
+                    <a href="#schedule" onclick="openPlan('planA')" class="block w-full text-center bg-slate-100 hover:bg-blue-50 text-blue-700 font-bold py-3 rounded-lg transition border border-slate-200">1박 2일 상세일정 보기</a>
+                </div>
+
+                <!-- Plan B -->
+                <div class="bg-white rounded-2xl p-8 border-t-4 border-emerald-600 shadow-lg hover:shadow-xl transition relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-bl-lg">가성비 & 깊이</div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-landmark"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">Plan B. 2박 3일</h3>
+                            <p class="text-emerald-600 font-bold text-sm mt-1">실속형 역사·문화 탐방형</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6 min-h-[60px]">종묘, 국립중앙박물관, 북촌 등 서울의 역사적 장소를 여유 있게 돌아보며, 학생 참여형 대학로 뮤지컬을 포함한 가성비 일정입니다.</p>
+                    <ul class="space-y-3 mb-8 text-sm text-slate-700">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>주요코스:</strong> 예술의전당, 종묘, 국립중앙박물관, 북촌</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>특별체험:</strong> 대학로 소극장 뮤지컬 (인사이드 미)</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(대학로), 다담샤브샤브 특식</li>
+                    </ul>
+                    <a href="#schedule" onclick="openPlan('planB')" class="block w-full text-center bg-slate-100 hover:bg-emerald-50 text-emerald-700 font-bold py-3 rounded-lg transition border border-slate-200">2박 3일 상세일정 보기</a>
+                </div>
+            </div>
+            
+            <div class="max-w-5xl mx-auto mt-6 bg-white border border-slate-200 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+                <i class="fa-solid fa-circle-info text-slate-400 mt-1"></i>
+                <div class="text-sm text-slate-600">
+                    <strong>공통 사항:</strong> 전 일정 숙소는 우수 숙박시설인 <strong>밀리토피아 바이마린 (성남)</strong>을 이용하며, 일정 2일차(Plan A) 및 3일차(Plan B)에는 학생들이 가장 선호하는 <strong>롯데월드 어드벤처</strong> 일정이 공통으로 포함되어 있습니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Schedule Section -->
+    <section id="schedule" class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-4">상세 일정표</h2>
+                
+                <!-- 탭 버튼 -->
+                <div class="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner">
+                    <button id="btn-planA" class="tab-btn active px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200 w-40" onclick="switchPlanTab('planA')">Plan A (1박 2일)</button>
+                    <button id="btn-planB" class="tab-btn text-slate-500 px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200 w-40" onclick="switchPlanTab('planB')">Plan B (2박 3일)</button>
+                </div>
+            </div>
+
+            <!-- Plan A Content -->
+            <div id="content-planA" class="plan-content animate-fade-in-up">
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-blue-900 text-lg">프리미엄 1박 2일 일정</h3>
+                        <p class="text-sm text-blue-700 mt-1">2026.10.14(수) ~ 10.15(목) | 학생 34명 + 교사 4명</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- A: Day 1 -->
+                    <div class="relative pl-8 border-l-2 border-slate-200">
+                        <div class="absolute left-[-21px] top-0 bg-blue-600 text-white font-bold text-xs py-1 px-2 rounded">1일차</div>
+                        <h4 class="font-bold text-lg text-slate-800 mb-4 mt-6">10월 14일 (수)</h4>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 08:40</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-blue-700">학교 출발</p>
+                                    <p class="text-sm text-slate-600">함백고등학교 집결 및 서울로 출발</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 12:00 ~ 14:30</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-slate-800">중식 및 예술의 전당</p>
+                                    <p class="text-sm text-slate-600">예술의 전당 내 식사 후 '브라이언 와일드스미스 전' 등 전시 관람</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 15:10 ~ 16:40</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-slate-800">롯데월드 아쿠아리움</p>
+                                    <p class="text-sm text-slate-600">도심 속 최대 규모 해양 생태계 탐방</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 17:00 ~ 18:30</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-slate-800">석식 (특식)</p>
+                                    <p class="text-sm text-slate-600">애슐리 퀸즈 (잠실롯데캐슬점) 뷔페식</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 19:30 ~ 22:00</div>
+                                <div class="mt-1 p-3 bg-blue-50 rounded-lg border border-blue-100 shadow-sm">
+                                    <p class="font-bold text-blue-800"><i class="fa-solid fa-masks-theater"></i> 대극장 뮤지컬 관람</p>
+                                    <p class="text-sm text-slate-600">샤롯데씨어터 (공연 미정 - 최고 수준의 대형 뮤지컬)</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 22:30</div>
+                                <div class="mt-1 p-3 bg-slate-100 rounded-lg">
+                                    <p class="font-bold text-slate-800"><i class="fa-solid fa-bed"></i> 호텔 체크인 및 휴식</p>
+                                    <p class="text-sm text-slate-600">숙소: 밀리토피아 바이마린 (성남)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- A: Day 2 -->
+                    <div class="relative pl-8 border-l-2 border-slate-200">
+                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded">2일차</div>
+                        <h4 class="font-bold text-lg text-slate-800 mb-4 mt-6">10월 15일 (목)</h4>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 08:00 ~ 09:00</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-slate-800">조식 및 체크아웃</p>
+                                    <p class="text-sm text-slate-600">숙소 내 식사 후 짐 정리 및 롯데월드 이동</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 10:00 ~ 15:00</div>
+                                <div class="mt-1 p-3 bg-blue-50 rounded-lg border border-blue-100 shadow-sm">
+                                    <p class="font-bold text-blue-800"><i class="fa-solid fa-ticket"></i> 롯데월드 어드벤처</p>
+                                    <p class="text-sm text-slate-600">조별 자유 시간 및 놀이기구 탑승 (중식: 롯데월드 내 자율식사)</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 font-bold text-slate-700"><i class="fa-regular fa-clock text-slate-400"></i> 15:00 ~ 18:00</div>
+                                <div class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p class="font-bold text-slate-800">학교로 이동</p>
+                                    <p class="text-sm text-slate-600">도착 후 해산 및 귀가</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan B Content -->
+            <div id="content-planB" class="plan-content hidden animate-fade-in-up">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8 flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-emerald-900 text-lg">실속 2박 3일 일정</h3>
+                        <p class="text-sm text-emerald-700 mt-1">2026.10.14(수) ~ 10.16(금) | 학생 34명 + 교사 4명</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- B: Day 1 -->
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute left-[-21px] top-0 bg-emerald-600 text-white font-bold text-xs py-1 px-2 rounded">1일차</div>
+                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 14 (수)</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">09:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100"><p class="font-bold text-sm text-emerald-700">학교 출발</p></div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">12:00 ~ 14:30</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">예술의 전당</p>
+                                    <p class="text-xs text-slate-600">푸드코트 중식 및 전시관람</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">15:00 ~ 16:30</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">세계문화유산 종묘</p>
+                                    <p class="text-xs text-slate-600">조선 왕조의 역사 탐방</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">17:00 ~ 18:30</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">석식 (애슐리퀸즈 대학로)</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">19:00 ~ 21:00</div>
+                                <div class="p-2 bg-emerald-50 rounded border border-emerald-100">
+                                    <p class="font-bold text-sm text-emerald-800">소극장 뮤지컬 관람</p>
+                                    <p class="text-xs text-slate-600">인사이드 미 (JTN 아트홀)</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">22:00</div>
+                                <div class="p-2 bg-slate-100 rounded">
+                                    <p class="font-bold text-sm">숙소 도착 및 휴식</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- B: Day 2 -->
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded">2일차</div>
+                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 15 (목)</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">08:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100"><p class="font-bold text-sm">기상 및 조식 (숙소)</p></div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">10:00 ~ 12:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">국립중앙박물관</p>
+                                    <p class="text-xs text-slate-600">대한민국 최고 박물관 관람</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">12:00 ~ 13:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">중식 (경천사탑 두레)</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">13:30 ~ 17:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">북촌한옥마을</p>
+                                    <p class="text-xs text-slate-600">조별 자유일정 및 한옥거리 탐방</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">18:00 ~ 19:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">석식 (다담샤브샤브)</p>
+                                    <p class="text-xs text-slate-600">위례점</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">19:30</div>
+                                <div class="p-2 bg-slate-100 rounded">
+                                    <p class="font-bold text-sm">숙소 도착 및 휴식</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- B: Day 3 -->
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded">3일차</div>
+                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 16 (금)</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">08:30</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100"><p class="font-bold text-sm">조식 및 체크아웃</p></div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">08:30 ~ 10:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">잠실로 이동</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">10:00 ~ 15:00</div>
+                                <div class="p-2 bg-emerald-50 rounded border border-emerald-100 shadow-sm">
+                                    <p class="font-bold text-sm text-emerald-800">롯데월드 어드벤처</p>
+                                    <p class="text-xs text-slate-600">자유 시간 및 밀쿠폰 중식</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 mb-1">15:00 ~ 18:00</div>
+                                <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                    <p class="font-bold text-sm">학교로 이동 및 귀가</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-section" class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-800">주요 거점 확인</h2>
+                <p class="text-slate-500 mt-2 text-sm">제안드린 동선의 주요 위치를 확인하실 수 있습니다. (함백고 출발 기준)</p>
+            </div>
+            <div class="max-w-5xl mx-auto bg-white p-2 rounded-xl shadow-md">
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Curation -->
+    <section id="video" class="py-16 bg-slate-900 text-white">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-extrabold">사전 답사 영상자료</h2>
+                <p class="text-slate-400 mt-3 text-sm">학생들이 경험하게 될 장소들의 분위기를 미리 확인해 보세요.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Video 1: Musical -->
+                <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/5T2k-f2T0f0?si=p0jG4X0VpS0x1O2N" title="Charlotte Theater" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <span class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold">Plan A</span>
+                        <h3 class="font-bold mt-2">대형 뮤지컬 관람의 감동</h3>
+                        <p class="text-xs text-slate-400 mt-1">대한민국 최초 뮤지컬 전용 극장 샤롯데씨어터의 압도적인 스케일</p>
+                    </div>
+                </div>
+
+                <!-- Video 2: History -->
+                <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+                    <div class="aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/m9qGz_N-uZQ?si=h0lP_vB-O1xP8GkE" title="Jongmyo Shrine" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-4">
+                        <span class="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded font-bold">Plan B</span>
+                        <h3 class="font-bold mt-2">세계유산 종묘와 북촌</h3>
+                        <p class="text-xs text-slate-400 mt-1">도심 속에서 만나는 가장 고요하고 아름다운 조선의 미학</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#f8f9fa] py-12 border-t border-slate-200">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col items-center justify-center mb-6">
+                <a href="http://tourmaker.kr" target="_blank" class="inline-block bg-white border border-slate-300 rounded-xl px-6 py-3 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-6">
+                        <span class="text-sm font-bold text-slate-700">홈페이지 방문 <i class="fa-solid fa-chevron-right text-xs"></i></span>
+                    </div>
+                </a>
+            </div>
+            <p class="text-[13px] text-[#6c757d] font-medium">안전하고 유익한 학교 행사를 위해 투어메이커가 최선을 다해 준비하겠습니다.</p>
+            <p class="text-[11px] text-slate-400 mt-2">&copy; 2026 Tourmaker Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    </div> <!-- End of Web View -->
+
+
+    <!-- ========================================== -->
+    <!-- 인쇄 전용 레이아웃 (제안서 첨부용 비교표) -->
+    <!-- ========================================== -->
+    <div class="hidden print:block bg-white text-black p-4 w-full font-sans" style="max-width: 210mm; margin: 0 auto;">
+        
+        <div class="border-b-2 border-black pb-4 mb-6 flex justify-between items-end">
+            <div>
+                <h1 class="text-2xl font-bold mb-1">[함백고등학교] 교과연계 프로그램 제안 일정표</h1>
+                <p class="text-sm text-gray-600">※ 상기 일정은 학교의 요청 및 현지 사정에 따라 조율 가능합니다.</p>
+            </div>
+            <div class="text-right">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" style="height:24px; display:inline-block;" alt="Tourmaker">
+                <p class="text-[10px] text-gray-500 mt-1">작성일: 2026.03</p>
+            </div>
+        </div>
+
+        <!-- Plan A Print -->
+        <div class="mb-8">
+            <h2 class="text-lg font-bold mb-2 pb-1 border-b border-gray-400 inline-block">■ Plan A. 1박 2일 (프리미엄 문화예술 집중형)</h2>
+            <table class="w-full text-[11px] border-collapse border border-gray-500 mt-2">
+                <thead>
+                    <tr class="bg-gray-100 text-center">
+                        <th class="border border-gray-500 p-2 w-16">일자</th>
+                        <th class="border border-gray-500 p-2 w-20">지역</th>
+                        <th class="border border-gray-500 p-2">상세일정</th>
+                        <th class="border border-gray-500 p-2 w-24">식사/비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-500 p-2 text-center font-bold align-top">1일차<br>(수)</td>
+                        <td class="border border-gray-500 p-2 text-center align-top">정선<br>서울</td>
+                        <td class="border border-gray-500 p-2">
+                            <ul class="list-none space-y-1">
+                                <li><strong>08:40</strong> 함백고등학교 출발 -> 서울 이동</li>
+                                <li><strong>12:00</strong> 중식 (예술의전당 내)</li>
+                                <li><strong>13:00</strong> 예술의전당 전시 관람 (브라이언 와일드스미스 전)</li>
+                                <li><strong>15:10</strong> 롯데월드 아쿠아리움 관람</li>
+                                <li><strong>17:00</strong> 석식 (애슐리퀸즈 잠실롯데캐슬)</li>
+                                <li><strong>19:30</strong> 대극장 뮤지컬 관람 (샤롯데씨어터)</li>
+                                <li class="pt-1 mt-1 border-t border-dotted border-gray-300"><strong>22:30</strong> 호텔 체크인 (밀리토피아 바이마린)</li>
+                            </ul>
+                        </td>
+                        <td class="border border-gray-500 p-2 text-center text-gray-700 align-top">
+                            조: -<br>중: 매식<br>석: 특식(뷔페)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-500 p-2 text-center font-bold align-top">2일차<br>(목)</td>
+                        <td class="border border-gray-500 p-2 text-center align-top">서울<br>정선</td>
+                        <td class="border border-gray-500 p-2">
+                            <ul class="list-none space-y-1">
+                                <li><strong>08:00</strong> 기상 및 조식 / 체크아웃</li>
+                                <li><strong>09:00</strong> 롯데월드로 이동</li>
+                                <li><strong>10:00</strong> 롯데월드 어드벤처 내 자유이용 (중식 자율)</li>
+                                <li><strong>15:00</strong> 학교로 이동</li>
+                                <li class="pt-1 mt-1 border-t border-dotted border-gray-300"><strong>18:00</strong> 학교 도착 및 해산</li>
+                            </ul>
+                        </td>
+                        <td class="border border-gray-500 p-2 text-center text-gray-700 align-top">
+                            조: 호텔식<br>중: 자율식<br>석: -
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Plan B Print -->
+        <div>
+            <h2 class="text-lg font-bold mb-2 pb-1 border-b border-gray-400 inline-block">■ Plan B. 2박 3일 (실속 역사·문화 탐방형)</h2>
+            <table class="w-full text-[11px] border-collapse border border-gray-500 mt-2">
+                <thead>
+                    <tr class="bg-gray-100 text-center">
+                        <th class="border border-gray-500 p-2 w-16">일자</th>
+                        <th class="border border-gray-500 p-2 w-20">지역</th>
+                        <th class="border border-gray-500 p-2">상세일정</th>
+                        <th class="border border-gray-500 p-2 w-24">식사/비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-gray-500 p-2 text-center font-bold align-top">1일차<br>(수)</td>
+                        <td class="border border-gray-500 p-2 text-center align-top">정선<br>서울</td>
+                        <td class="border border-gray-500 p-2">
+                            <ul class="list-none space-y-1">
+                                <li><strong>09:00</strong> 함백고등학교 출발 -> 서울 이동</li>
+                                <li><strong>12:00</strong> 중식 (예술의전당 내 푸드코트)</li>
+                                <li><strong>13:00</strong> 예술의전당 전시 관람 (브라이언 와일드스미스 전)</li>
+                                <li><strong>15:00</strong> 세계문화유산 종묘 관람</li>
+                                <li><strong>17:00</strong> 석식 (애슐리퀸즈 대학로점)</li>
+                                <li><strong>19:00</strong> 소극장 뮤지컬 관람 (인사이드 미 / JTN 아트홀)</li>
+                                <li class="pt-1 mt-1 border-t border-dotted border-gray-300"><strong>22:00</strong> 숙소 도착 및 휴식 (밀리토피아 바이마린)</li>
+                            </ul>
+                        </td>
+                        <td class="border border-gray-500 p-2 text-center text-gray-700 align-top">
+                            조: -<br>중: 푸드코트<br>석: 특식(뷔페)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-500 p-2 text-center font-bold align-top">2일차<br>(목)</td>
+                        <td class="border border-gray-500 p-2 text-center align-top">서울</td>
+                        <td class="border border-gray-500 p-2">
+                            <ul class="list-none space-y-1">
+                                <li><strong>08:00</strong> 기상 및 조식</li>
+                                <li><strong>10:00</strong> 국립중앙박물관 관람</li>
+                                <li><strong>12:00</strong> 중식 (경천사탑 두레)</li>
+                                <li><strong>13:30</strong> 북촌한옥마을 등 조별 자유일정</li>
+                                <li><strong>18:00</strong> 석식 (다담샤브샤브 위례점)</li>
+                                <li class="pt-1 mt-1 border-t border-dotted border-gray-300"><strong>19:30</strong> 숙소 도착 및 휴식</li>
+                            </ul>
+                        </td>
+                        <td class="border border-gray-500 p-2 text-center text-gray-700 align-top">
+                            조: 호텔식<br>중: 매식<br>석: 특식
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-500 p-2 text-center font-bold align-top">3일차<br>(금)</td>
+                        <td class="border border-gray-500 p-2 text-center align-top">서울<br>정선</td>
+                        <td class="border border-gray-500 p-2">
+                            <ul class="list-none space-y-1">
+                                <li><strong>08:30</strong> 기상 및 조식 / 체크아웃</li>
+                                <li><strong>08:30</strong> 롯데월드로 이동 (옥외주차장)</li>
+                                <li><strong>10:00</strong> 롯데월드 어드벤처 내 자유이용 (밀쿠폰)</li>
+                                <li><strong>15:00</strong> 학교로 이동</li>
+                                <li class="pt-1 mt-1 border-t border-dotted border-gray-300"><strong>18:00</strong> 학교 도착 및 해산</li>
+                            </ul>
+                        </td>
+                        <td class="border border-gray-500 p-2 text-center text-gray-700 align-top">
+                            조: 호텔식<br>중: 밀쿠폰<br>석: -
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- 인쇄 전용 레이아웃 종료 -->
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 탭 전환 로직 (Plan A / Plan B)
+        function switchPlanTab(plan) {
+            // 버튼 상태 변경
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'bg-emerald-600', 'text-white');
+                btn.classList.add('text-slate-500');
+            });
+            
+            // 콘텐츠 토글
+            document.querySelectorAll('.plan-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            const btn = document.getElementById(`btn-${plan}`);
+            const content = document.getElementById(`content-${plan}`);
+            
+            if(plan === 'planA') {
+                btn.classList.add('active', 'bg-blue-600', 'text-white');
+                btn.classList.remove('text-slate-500');
+            } else {
+                btn.classList.add('active', 'bg-emerald-600', 'text-white');
+                btn.classList.remove('text-slate-500');
+            }
+            content.classList.remove('hidden');
+        }
+
+        // 제안 개요에서 버튼 클릭 시 탭 전환 후 스크롤
+        function openPlan(plan) {
+            switchPlanTab(plan);
+            // 약간의 지연 후 스크롤 처리 (렌더링 시간 확보)
+            setTimeout(() => {
+                document.getElementById('schedule').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // 공유 기능
+        function shareLink(){
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: '[함백고] 교과연계 프로그램 제안서', url }).catch(()=>{});
+            } else {
+                navigator.clipboard?.writeText(url).then(()=>alert('제안서 링크가 복사되었습니다. 선생님들께 공유해주세요.'));
+            }
+        }
+
+        // 지도 초기화 (Leaflet)
+        let mapInited = false;
+        function initMap(){
+            if(mapInited || !window.L) return;
+            mapInited = true;
+            
+            // 함백고 출발 기준, 서울 주요 스팟
+            const spots = {
+                school: [37.2407, 128.7188], // 정선 함백고등학교 대략적 위치
+                sac: [37.4792, 127.0118], // 예술의 전당
+                jamsil: [37.5133, 127.1001], // 롯데월드, 아쿠아리움
+                daehangno: [37.5815, 127.0028], // 대학로 (뮤지컬)
+                jongmyo: [37.5746, 126.9940], // 종묘
+                museum: [37.5240, 126.9804], // 국립중앙박물관
+                bukchon: [37.5826, 126.9835] // 북촌한옥마을
+            };
+
+            const map = L.map('map', { scrollWheelZoom:false });
+            
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 19
+            }).addTo(map);
+
+            // 마커 생성 함수
+            const createMarker = (latlng, title, iconHtml, color) => {
+                const icon = L.divIcon({
+                    className: 'custom-icon',
+                    html: `<div style="background-color:${color}; width:30px; height:30px; border-radius:50%; border:2px solid white; color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">${iconHtml}</div>`,
+                    iconSize: [30, 30]
+                });
+                L.marker(latlng, {icon: icon}).addTo(map).bindPopup(`<b style="font-family:'Noto Sans KR', sans-serif;">${title}</b>`);
+            };
+
+            // 스팟 마커 추가
+            createMarker(spots.school, '함백고등학교 (출발)', '🏫', '#64748b');
+            createMarker(spots.sac, '예술의전당 (공통)', '🎨', '#8b5cf6');
+            createMarker(spots.jamsil, '잠실 롯데권역 (공통/Plan A)', '🎢', '#3b82f6');
+            createMarker(spots.jongmyo, '종묘 (Plan B)', '🏛️', '#10b981');
+            createMarker(spots.museum, '국립중앙박물관 (Plan B)', '🏺', '#10b981');
+            createMarker(spots.bukchon, '북촌한옥마을 (Plan B)', '🏘️', '#10b981');
+            createMarker(spots.daehangno, '대학로 극장가 (Plan B)', '🎭', '#10b981');
+
+            // 동선 표시 (단순화)
+            L.polyline([spots.school, spots.sac], { color: '#94a3b8', weight: 3, dashArray: '5,5' }).addTo(map);
+            
+            // 서울 지역 중심으로 바운드 설정 (학교 제외하여 서울 자세히 보이도록)
+            const seoulBounds = L.latLngBounds([spots.sac, spots.jamsil, spots.bukchon, spots.daehangno]);
+            map.fitBounds(seoulBounds, { padding: [40, 40] });
+        }
+
+        // 스크롤 시 맵 로딩 (옵저버)
+        const io = new IntersectionObserver((entries)=>{
+            if(entries[0].isIntersecting) { initMap(); io.disconnect(); }
+        }, { threshold: 0.1 });
+        io.observe(document.getElementById('map-section'));
+
+        // 초기 탭 세팅
+        switchPlanTab('planA');
+    </script>
+</body>
+</html>
