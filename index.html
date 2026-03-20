@@ -36,10 +36,11 @@
             background-size: cover; background-position: center; background-attachment: fixed;
         }
         @media (max-width: 768px){ .hero-bg { background-attachment: scroll; } }
-        .map-container { height: 500px; width: 100%; border-radius: 0.75rem; border: 1px solid #e2e8f0; z-index: 10; }
+        .map-container { height: 450px; width: 100%; border-radius: 0.75rem; z-index: 10; }
+        @media (min-width: 768px){ .map-container { height: 550px; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         section { scroll-margin-top: 64px; }
         
         .custom-icon div {
@@ -51,13 +52,9 @@
         .tab-btn.active { background-color: #1e40af; color: white; border-color: #1e40af; }
         .tab-btn-map.active { background-color: #334155; color: white; border-color: #334155; }
 
-        /* 지도 동선 애니메이션 (처음엔 천천히, 나중엔 빠르게: ease-in) */
-        .animated-path {
-            animation: drawPath 4s ease-in forwards;
-        }
-        @keyframes drawPath {
-            to { stroke-dashoffset: 0; }
-        }
+        /* 지도 동선 애니메이션 */
+        .animated-path { animation: drawPath 2s ease-in forwards; }
+        @keyframes drawPath { to { stroke-dashoffset: 0; } }
     </style>
 </head>
 <body class="antialiased">
@@ -71,7 +68,7 @@
                 <a href="http://tourmaker.kr" target="_blank">
                     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-7">
                 </a>
-                <span class="bg-slate-800 text-white text-[10px] px-2 py-0.5 rounded font-bold tracking-wider">PROPOSAL</span>
+                <span id="d-day-badge" class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold tracking-wider hidden transition-colors shadow-sm"></span>
             </div>
             
             <div class="flex-1 overflow-x-auto no-scrollbar ml-4 md:ml-8">
@@ -80,8 +77,9 @@
                     <a href="#humanities" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">인문학</a>
                     <a href="#schedule" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">상세일정</a>
                     <a href="#hotel" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">숙소안내</a>
-                    <a href="#safety-esg" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">안전/ESG</a>
                     <a href="#map-section" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">상세동선</a>
+                    <a href="#video" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">서울맛보기</a>
+                    <a href="#safety-esg" class="text-[13px] font-bold text-slate-700 hover:text-blue-700 transition-colors">안전/ESG</a>
                 </div>
             </div>
 
@@ -114,40 +112,44 @@
             
             <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 <!-- Plan A -->
-                <div class="bg-white rounded-2xl p-8 border-t-4 border-blue-600 shadow-lg hover:shadow-xl transition relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-bl-lg">시간 효율 극대화</div>
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-gem"></i></div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-800">Plan A. 1박 2일</h3>
-                            <p class="text-blue-600 font-bold text-sm mt-1">프리미엄 문화·예술 집중형</p>
+                <div class="bg-white rounded-2xl p-8 border-t-4 border-blue-600 shadow-lg hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-bl-lg">시간 효율 극대화</div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-gem"></i></div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">Plan A. 1박 2일</h3>
+                                <p class="text-blue-600 font-bold text-sm mt-1">프리미엄 문화·예술 집중형</p>
+                            </div>
                         </div>
+                        <p class="text-slate-600 text-sm mb-6 min-h-[60px]">짧은 일정 속에 샤롯데씨어터 대형 뮤지컬과 아쿠아리움 등 높은 수준의 문화 체험을 압축적으로 담은 하이엔드 일정입니다.</p>
+                        <ul class="space-y-3 mb-8 text-sm text-slate-700">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>주요코스:</strong> 예술의전당, 롯데아쿠아리움, 롯데월드</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>특별체험:</strong> 샤롯데씨어터 대극장 뮤지컬 관람</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(잠실점) 석식 제공</li>
+                        </ul>
                     </div>
-                    <p class="text-slate-600 text-sm mb-6 min-h-[60px]">짧은 일정 속에 샤롯데씨어터 대형 뮤지컬과 아쿠아리움 등 높은 수준의 문화 체험을 압축적으로 담은 하이엔드 일정입니다.</p>
-                    <ul class="space-y-3 mb-8 text-sm text-slate-700">
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>주요코스:</strong> 예술의전당, 롯데아쿠아리움, 롯데월드</li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>특별체험:</strong> 샤롯데씨어터 대극장 뮤지컬 관람</li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(잠실점) 석식 제공</li>
-                    </ul>
                     <a href="#schedule" onclick="openPlan('planA')" class="block w-full text-center bg-slate-100 hover:bg-blue-50 text-blue-700 font-bold py-3 rounded-lg transition border border-slate-200">1박 2일 상세일정 보기</a>
                 </div>
 
                 <!-- Plan B -->
-                <div class="bg-white rounded-2xl p-8 border-t-4 border-emerald-600 shadow-lg hover:shadow-xl transition relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-bl-lg">가성비 & 깊이</div>
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-landmark"></i></div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-800">Plan B. 2박 3일</h3>
-                            <p class="text-emerald-600 font-bold text-sm mt-1">실속형 역사·문화 탐방형</p>
+                <div class="bg-white rounded-2xl p-8 border-t-4 border-emerald-600 shadow-lg hover:shadow-xl transition relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-bl-lg">가성비 & 깊이</div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-2xl"><i class="fa-solid fa-landmark"></i></div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-slate-800">Plan B. 2박 3일</h3>
+                                <p class="text-emerald-600 font-bold text-sm mt-1">실속형 역사·문화 탐방형</p>
+                            </div>
                         </div>
+                        <p class="text-slate-600 text-sm mb-6 min-h-[60px]">종묘, 국립중앙박물관, 북촌 등 서울의 역사적 장소를 여유 있게 돌아보며, 학생 참여형 대학로 뮤지컬을 포함한 가성비 일정입니다.</p>
+                        <ul class="space-y-3 mb-8 text-sm text-slate-700">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>주요코스:</strong> 종묘, 국립중앙박물관, 북촌, 예술의전당</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>특별체험:</strong> 대학로 소극장 뮤지컬 (관객 참여형)</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(대학로), 다담샤브샤브 특식</li>
+                        </ul>
                     </div>
-                    <p class="text-slate-600 text-sm mb-6 min-h-[60px]">종묘, 국립중앙박물관, 북촌 등 서울의 역사적 장소를 여유 있게 돌아보며, 학생 참여형 대학로 뮤지컬을 포함한 가성비 일정입니다.</p>
-                    <ul class="space-y-3 mb-8 text-sm text-slate-700">
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>주요코스:</strong> 종묘, 국립중앙박물관, 북촌, 예술의전당</li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>특별체험:</strong> 대학로 소극장 뮤지컬 (관객 참여형)</li>
-                        <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i> <strong>식사특전:</strong> 애슐리퀸즈(대학로), 다담샤브샤브 특식</li>
-                    </ul>
                     <a href="#schedule" onclick="openPlan('planB')" class="block w-full text-center bg-slate-100 hover:bg-emerald-50 text-emerald-700 font-bold py-3 rounded-lg transition border border-slate-200">2박 3일 상세일정 보기</a>
                 </div>
             </div>
@@ -168,7 +170,6 @@
                         이번 함백고등학교의 문화탐방은 단순한 관광을 넘어, <strong>'종묘와 북촌'</strong>에서 우리 고유의 절제미와 건축 미학을 배우고, <strong>'예술의전당과 대극장/소극장'</strong>에서 세계적 수준의 무대 연출과 호흡을 체감하며 학생들의 인문학적 소양과 문화적 상상력을 확장하는 살아있는 교과서가 될 것입니다.
                     </p>
                 </div>
-                <!-- 교체된 북촌 및 서울 야경 이미지 -->
                 <div class="md:w-1/2 w-full grid grid-cols-2 gap-3">
                     <img src="https://archive.visitseoul.net/upload/encoding/image/2023/12//ebefb2f34b6a4f17a1caf66a08ccdc73.jpg" alt="북촌 한옥마을" class="rounded-xl shadow-md h-40 object-cover w-full">
                     <img src="https://archive.visitseoul.net/upload/encoding/image/2025/01//8c9b3dfd0c004cf5ab77ddc429138da8.jpg" alt="서울 야경" class="rounded-xl shadow-md h-40 object-cover w-full mt-6">
@@ -177,11 +178,12 @@
         </div>
     </section>
 
-    <!-- Detailed Schedule Section -->
+    <!-- Detailed Schedule Section (Text) -->
     <section id="schedule" class="py-16 bg-slate-50 border-t border-slate-200">
-        <div class="container mx-auto px-4 max-w-5xl">
+        <div class="container mx-auto px-4 max-w-6xl">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-extrabold text-slate-800 mb-4">상세 일정표</h2>
+                <span class="text-blue-600 font-bold text-sm tracking-wider">Itinerary Details</span>
+                <h2 class="text-3xl font-extrabold text-slate-800 mt-2 mb-4">플랜별 상세 일정표</h2>
                 
                 <div class="inline-flex bg-slate-200 p-1 rounded-xl shadow-inner">
                     <button id="btn-planA" class="tab-btn active px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200 w-40" onclick="switchPlanTab('planA')">Plan A (1박 2일)</button>
@@ -189,88 +191,157 @@
                 </div>
             </div>
 
-            <!-- Plan A Content -->
+            <!-- Plan A Schedule Content -->
             <div id="content-planA" class="plan-content animate-fade-in-up">
-                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8">
-                    <h3 class="font-bold text-blue-900 text-lg">프리미엄 1박 2일 일정</h3>
-                    <p class="text-sm text-blue-700 mt-1">2026.10.14(수) ~ 10.15(목) | 학생 34명 + 교사 4명</p>
+                <div class="bg-white border-l-4 border-blue-600 shadow-sm rounded-r-xl p-5 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">프리미엄 1박 2일 일정</h3>
+                        <p class="text-sm text-slate-500 mt-1">2026.10.14(수) ~ 10.15(목) | 대상: 학생 34명, 교사 4명</p>
+                    </div>
+                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-bold">
+                        <i class="fa-solid fa-gem mr-1"></i> 문화예술 집중형
+                    </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-8">
+                <!-- 일자별 필터 버튼 (Plan A) -->
+                <div class="flex gap-2 mb-6 justify-center md:justify-start">
+                    <button onclick="filterScheduleDays(event, 'A', 'all')" class="day-filter-A active px-5 py-1.5 rounded-full text-sm font-bold border border-blue-600 bg-blue-600 text-white transition-colors shadow-sm">전체보기</button>
+                    <button onclick="filterScheduleDays(event, 'A', 1)" class="day-filter-A px-5 py-1.5 rounded-full text-sm font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">1일차</button>
+                    <button onclick="filterScheduleDays(event, 'A', 2)" class="day-filter-A px-5 py-1.5 rounded-full text-sm font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">2일차</button>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
                     <!-- A: Day 1 -->
-                    <div class="relative pl-8 border-l-2 border-blue-300">
-                        <div class="absolute left-[-21px] top-0 bg-blue-600 text-white font-bold text-xs py-1 px-2 rounded shadow-md">1일차</div>
-                        <h4 class="font-bold text-lg text-slate-800 mb-4 mt-6">10월 14일 (수)</h4>
-                        
-                        <div class="space-y-5">
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">08:40 ~ 12:00</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-slate-800">학교 출발 및 중식</p>
-                                    <p class="text-xs text-slate-600 mt-1">함백고 출발 후 예술의 전당으로 이동 및 구내 식사</p>
+                    <div class="day-card-A day-card-A-1 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all">
+                        <div class="bg-blue-600 text-white p-4 text-center">
+                            <h4 class="font-extrabold text-xl">1일차</h4>
+                            <p class="text-blue-100 text-sm mt-1">10. 14 (수) | 예술과 문화의 만남</p>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 bg-slate-50/50">
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">08:40</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-slate-800 text-sm">학교 출발 및 중식</p>
+                                    <p class="text-xs text-slate-600 mt-1">함백고 출발 후 예술의 전당 이동 및 구내 식사</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">13:00 ~ 14:30</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-blue-700">예술의 전당 전시 관람</p>
-                                    <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-paintbrush text-blue-400"></i> <strong>브라이언 와일드스미스 전:</strong> 세계적인 그림책 거장의 원화를 통해 색채의 마술과 창의적인 시각 예술을 직접 체험하는 시간.</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">13:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-blue-700 text-sm">예술의 전당 전시 관람</p>
+                                    <p class="text-xs text-slate-600 mt-1"><strong>브라이언 와일드스미스 전:</strong> 창의적 시각 예술 체험</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">15:10 ~ 16:40</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-blue-700">롯데월드 아쿠아리움</p>
-                                    <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-fish-fins text-blue-400"></i> 전 세계 5대양 해양 생태계를 그대로 옮겨놓은 도심 속 수족관에서 해양 생물 다양성과 환경 보호의 중요성을 학습합니다.</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">15:10</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-blue-700 text-sm">롯데월드 아쿠아리움</p>
+                                    <p class="text-xs text-slate-600 mt-1">도심 속 수족관에서 배우는 해양 생태계</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">17:00 ~ 18:30</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-slate-800">석식 (특식 제공)</p>
-                                    <p class="text-xs text-slate-600 mt-1">애슐리 퀸즈(잠실롯데캐슬점) - 학생 선호도 1위 뷔페식</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">17:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-slate-800 text-sm">석식 (특식 제공)</p>
+                                    <p class="text-xs text-slate-600 mt-1">애슐리 퀸즈 (잠실롯데캐슬점) - 뷔페식</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">19:30 ~ 22:00</div>
-                                <div class="p-3 bg-blue-50 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-blue-800"><i class="fa-solid fa-masks-theater"></i> 대극장 뮤지컬 관람</p>
-                                    <p class="text-xs text-slate-600 mt-1"><strong>샤롯데씨어터:</strong> 대한민국 최초 뮤지컬 전용 극장에서 펼쳐지는 압도적인 무대 연출과 라이브 오케스트라, 배우들의 열연을 감상하며 문화적 견문을 넓힙니다.</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">19:30</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-blue-800 text-sm"><i class="fa-solid fa-masks-theater"></i> 대극장 뮤지컬 관람</p>
+                                    <p class="text-xs text-slate-600 mt-1"><strong>샤롯데씨어터:</strong> 대형 뮤지컬의 압도적 무대 연출 감상</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">22:30</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                    <p class="font-bold text-slate-800">호텔 체크인 및 휴식 (밀리토피아)</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">22:30</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-slate-400 rounded-full z-10"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">호텔 체크인 및 휴식</p>
+                                    <p class="text-xs text-slate-600 mt-1">밀리토피아 호텔 바이 마린</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- A: Day 2 -->
-                    <div class="relative pl-8 border-l-2 border-slate-300">
-                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded shadow-md">2일차</div>
-                        <h4 class="font-bold text-lg text-slate-800 mb-4 mt-6">10월 15일 (목)</h4>
-                        
-                        <div class="space-y-5">
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">08:00 ~ 09:00</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-slate-800">기상, 호텔 조식 및 체크아웃</p>
+                    <div class="day-card-A day-card-A-2 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all">
+                        <div class="bg-blue-800 text-white p-4 text-center">
+                            <h4 class="font-extrabold text-xl">2일차</h4>
+                            <p class="text-blue-100 text-sm mt-1">10. 15 (목) | 협동과 성취</p>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 bg-slate-50/50">
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">08:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-slate-800 text-sm">기상, 호텔 조식 및 체크아웃</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">10:00 ~ 15:00</div>
-                                <div class="p-3 bg-blue-50 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition">
-                                    <p class="font-bold text-blue-800"><i class="fa-solid fa-ticket"></i> 롯데월드 어드벤처 (자유시간)</p>
-                                    <p class="text-xs text-slate-600 mt-1">조별 자유 활동을 통해 협동심을 기르고, 학업 스트레스를 해소하는 시간입니다. 중식은 파크 내에서 조별 자율 식사로 진행됩니다.</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">09:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-slate-800 text-sm">롯데월드로 이동</p>
                                 </div>
                             </div>
-                            <div>
-                                <div class="text-xs font-bold text-slate-500 mb-1">15:00 ~ 18:00</div>
-                                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                    <p class="font-bold text-slate-800">학교로 이동 및 귀가</p>
-                                    <p class="text-xs text-slate-600 mt-1">안전하게 함백고등학교 도착 후 해산</p>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">10:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-blue-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-blue-800 text-sm"><i class="fa-solid fa-ticket"></i> 롯데월드 어드벤처</p>
+                                    <p class="text-xs text-slate-600 mt-1">조별 자유 활동 (중식 자율 식사)</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">15:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-slate-400 rounded-full z-10"></div>
+                                    <div class="w-0.5 h-full bg-slate-200 absolute top-3"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="font-bold text-slate-800 text-sm">학교로 이동</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-16 shrink-0 text-right pt-0.5"><span class="text-xs font-bold text-slate-500">18:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-3 h-3 bg-slate-400 rounded-full z-10"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">함백고 도착 및 귀가</p>
+                                    <p class="text-xs text-slate-600 mt-1">도착 후 안전 해산</p>
                                 </div>
                             </div>
                         </div>
@@ -278,94 +349,207 @@
                 </div>
             </div>
 
-            <!-- Plan B Content -->
+            <!-- Plan B Schedule Content -->
             <div id="content-planB" class="plan-content hidden animate-fade-in-up">
-                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8">
-                    <h3 class="font-bold text-emerald-900 text-lg">실속 2박 3일 일정</h3>
-                    <p class="text-sm text-emerald-700 mt-1">2026.10.14(수) ~ 10.16(금) | 학생 34명 + 교사 4명</p>
+                <div class="bg-white border-l-4 border-emerald-600 shadow-sm rounded-r-xl p-5 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">실속 2박 3일 일정</h3>
+                        <p class="text-sm text-slate-500 mt-1">2026.10.14(수) ~ 10.16(금) | 대상: 학생 34명, 교사 4명</p>
+                    </div>
+                    <div class="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg text-sm font-bold">
+                        <i class="fa-solid fa-landmark mr-1"></i> 역사·문화 탐방형
+                    </div>
                 </div>
 
-                <div class="grid md:grid-cols-3 gap-6">
+                <!-- 일자별 필터 버튼 (Plan B) -->
+                <div class="flex gap-2 mb-6 justify-center md:justify-start flex-wrap">
+                    <button onclick="filterScheduleDays(event, 'B', 'all')" class="day-filter-B active px-5 py-1.5 rounded-full text-sm font-bold border border-emerald-600 bg-emerald-600 text-white transition-colors shadow-sm">전체보기</button>
+                    <button onclick="filterScheduleDays(event, 'B', 1)" class="day-filter-B px-5 py-1.5 rounded-full text-sm font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">1일차</button>
+                    <button onclick="filterScheduleDays(event, 'B', 2)" class="day-filter-B px-5 py-1.5 rounded-full text-sm font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">2일차</button>
+                    <button onclick="filterScheduleDays(event, 'B', 3)" class="day-filter-B px-5 py-1.5 rounded-full text-sm font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">3일차</button>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
                     <!-- B: Day 1 -->
-                    <div class="relative pl-6 border-l-2 border-emerald-300">
-                        <div class="absolute left-[-21px] top-0 bg-emerald-600 text-white font-bold text-xs py-1 px-2 rounded shadow-md">1일차</div>
-                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 14 (수)</h4>
-                        
-                        <div class="space-y-4">
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">09:00 ~ 14:30</div>
-                                <p class="font-bold text-sm text-emerald-700">학교 출발 및 예술의 전당</p>
-                                <p class="text-xs text-slate-600 mt-1">푸드코트 중식 후 브라이언 와일드스미스 전 관람</p>
+                    <div class="day-card-B day-card-B-1 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all">
+                        <div class="bg-emerald-600 text-white p-4 text-center">
+                            <h4 class="font-extrabold text-xl">1일차</h4>
+                            <p class="text-emerald-100 text-sm mt-1">10. 14 (수) | 예술과 전통</p>
+                        </div>
+                        <div class="p-5 flex-1 bg-slate-50/50">
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">09:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">학교 출발 및 예술의전당</p>
+                                    <p class="text-xs text-slate-600 mt-1">푸드코트 중식 및 전시 관람</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">15:00 ~ 16:30</div>
-                                <p class="font-bold text-sm text-emerald-700">세계문화유산 종묘</p>
-                                <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-landmark text-emerald-500"></i> 조선 왕조 역대 왕과 왕비의 신위를 모신 사당으로, 완벽한 비례와 절제된 건축미를 통해 유교 사상의 정수를 배웁니다.</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">15:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-emerald-700 text-sm">세계문화유산 종묘</p>
+                                    <p class="text-xs text-slate-600 mt-1">조선 왕조의 건축미 탐방</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">17:00 ~ 18:30</div>
-                                <p class="font-bold text-sm">석식 (애슐리퀸즈 대학로)</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">17:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">석식 (애슐리 퀸즈)</p>
+                                    <p class="text-xs text-slate-600 mt-1">대학로점 이동 및 식사</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 shadow-sm">
-                                <div class="text-xs font-bold text-emerald-600 mb-1">19:00 ~ 21:00</div>
-                                <p class="font-bold text-sm text-emerald-800"><i class="fa-solid fa-masks-theater"></i> 소극장 뮤지컬 관람</p>
-                                <p class="text-xs text-slate-600 mt-1"><strong>인사이드 미(JTN 아트홀):</strong> 관객과 무대가 가까운 대학로 소극장에서 배우들의 숨소리까지 느끼며 소통하는 참여형 문화 체험입니다.</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">19:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-emerald-800 text-sm"><i class="fa-solid fa-masks-theater"></i> 소극장 뮤지컬</p>
+                                    <p class="text-xs text-slate-600 mt-1">인사이드 미 (JTN 아트홀)</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-slate-100 rounded-lg border border-slate-200">
-                                <p class="font-bold text-sm">22:00 숙소 도착 (밀리토피아)</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">22:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-slate-400 rounded-full z-10"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">숙소 도착 및 휴식</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- B: Day 2 -->
-                    <div class="relative pl-6 border-l-2 border-slate-300">
-                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded shadow-md">2일차</div>
-                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 15 (목)</h4>
-                        
-                        <div class="space-y-4">
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">08:00 ~ 12:00</div>
-                                <p class="font-bold text-sm text-emerald-700">조식 및 국립중앙박물관</p>
-                                <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-building-columns text-emerald-500"></i> 선사시대부터 근대까지 한반도의 방대한 역사와 찬란한 문화유산을 한눈에 조망하는 대한민국 최대 규모의 박물관 관람.</p>
+                    <div class="day-card-B day-card-B-2 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all">
+                        <div class="bg-emerald-700 text-white p-4 text-center">
+                            <h4 class="font-extrabold text-xl">2일차</h4>
+                            <p class="text-emerald-100 text-sm mt-1">10. 15 (목) | 역사 깊이보기</p>
+                        </div>
+                        <div class="p-5 flex-1 bg-slate-50/50">
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">08:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">기상 및 조식</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">12:00 ~ 13:00</div>
-                                <p class="font-bold text-sm">중식 (경천사탑 두레)</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">10:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-emerald-700 text-sm">국립중앙박물관</p>
+                                    <p class="text-xs text-slate-600 mt-1">방대한 한반도 역사 조망</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">13:30 ~ 17:00</div>
-                                <p class="font-bold text-sm text-emerald-700">북촌한옥마을 탐방</p>
-                                <p class="text-xs text-slate-600 mt-1"><i class="fa-solid fa-house-chimney text-emerald-500"></i> 빌딩 숲 사이로 보존된 전통 한옥의 아름다움을 감상하며 조별로 주도적인 동선을 계획하고 자율적으로 탐방합니다.</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">12:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">중식 (경천사탑 두레)</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">18:00 ~ 19:00</div>
-                                <p class="font-bold text-sm">석식 (다담샤브샤브 위례점)</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">13:30</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-emerald-700 text-sm">북촌한옥마을 탐방</p>
+                                    <p class="text-xs text-slate-600 mt-1">조별 주도적 자율 탐방</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-slate-100 rounded-lg border border-slate-200">
-                                <p class="font-bold text-sm">19:30 숙소 복귀 및 휴식</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">18:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">석식 (다담샤브샤브)</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">19:30</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-slate-400 rounded-full z-10"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">숙소 복귀 및 휴식</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- B: Day 3 -->
-                    <div class="relative pl-6 border-l-2 border-slate-300">
-                        <div class="absolute left-[-21px] top-0 bg-slate-600 text-white font-bold text-xs py-1 px-2 rounded shadow-md">3일차</div>
-                        <h4 class="font-bold text-base text-slate-800 mb-4 mt-6">10. 16 (금)</h4>
-                        
-                        <div class="space-y-4">
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">08:30 ~ 10:00</div>
-                                <p class="font-bold text-sm">기상, 조식 및 잠실 이동</p>
+                    <div class="day-card-B day-card-B-3 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all">
+                        <div class="bg-emerald-800 text-white p-4 text-center">
+                            <h4 class="font-extrabold text-xl">3일차</h4>
+                            <p class="text-emerald-100 text-sm mt-1">10. 16 (금) | 협동과 성취</p>
+                        </div>
+                        <div class="p-5 flex-1 bg-slate-50/50">
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">08:30</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">기상, 조식 및 체크아웃</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 shadow-sm">
-                                <div class="text-xs font-bold text-emerald-600 mb-1">10:00 ~ 15:00</div>
-                                <p class="font-bold text-sm text-emerald-800"><i class="fa-solid fa-ticket"></i> 롯데월드 어드벤처</p>
-                                <p class="text-xs text-slate-600 mt-1">친구들과 함께하는 놀이공원 자유 시간. (중식: 제공된 밀쿠폰으로 자율 식사)</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">10:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-emerald-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-emerald-800 text-sm"><i class="fa-solid fa-ticket"></i> 롯데월드 어드벤처</p>
+                                    <p class="text-xs text-slate-600 mt-1">놀이공원 자유 시간 (자율 중식)</p>
+                                </div>
                             </div>
-                            <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
-                                <div class="text-xs font-bold text-slate-500 mb-1">15:00 ~ 18:00</div>
-                                <p class="font-bold text-sm">학교 이동 및 도착</p>
-                                <p class="text-xs text-slate-600 mt-1">함백고등학교 귀가 및 해산</p>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">15:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-slate-400 rounded-full z-10"></div>
+                                    <div class="w-[1px] h-full bg-slate-200 absolute top-2.5"></div>
+                                </div>
+                                <div class="pb-5">
+                                    <p class="font-bold text-slate-800 text-sm">학교로 이동</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <div class="w-12 shrink-0 text-right pt-0.5"><span class="text-[11px] font-bold text-slate-500">18:00</span></div>
+                                <div class="relative flex flex-col items-center">
+                                    <div class="w-2.5 h-2.5 bg-slate-400 rounded-full z-10"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-sm">함백고 도착 및 해산</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -417,40 +601,122 @@
         </div>
     </section>
 
-    <!-- Safety & ESG Section -->
-    <section id="safety-esg" class="py-16 bg-slate-900 text-white">
+    <!-- Map Section (1박 2일, 2박 3일 맵 완벽 분리 및 일자별 필터) -->
+    <section id="map-section" class="py-16 bg-slate-50 border-t border-slate-200">
         <div class="container mx-auto px-4 max-w-6xl">
             <div class="text-center mb-12">
-                <span class="text-emerald-400 font-bold text-sm tracking-wider">Safety & ESG Management</span>
-                <h2 class="text-3xl font-extrabold mt-2">긴급 대처방안 및 ESG 실천안</h2>
-                <p class="text-slate-400 mt-2 text-sm">학부모님과 선생님이 안심할 수 있는 체계적 관리와 지속가능한 여행을 약속합니다.</p>
+                <span class="text-slate-600 font-bold text-sm tracking-wider">Map Routing</span>
+                <h2 class="text-3xl font-extrabold text-slate-800 mt-2">방문지 상세 동선 비교</h2>
+                <p class="text-slate-500 mt-3 text-sm">PC와 모바일 모두에서 최적화된 동선 지도를 플랜별로 확인하세요.<br>일자별 버튼을 클릭하면 해당 일자의 동선만 상세히 볼 수 있습니다.</p>
+            </div>
+            
+            <div class="space-y-16">
+                <!-- Map Plan A -->
+                <div>
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <h3 class="text-xl font-bold text-blue-800"><i class="fa-solid fa-map-location-dot mr-2"></i>Plan A. 1박 2일 동선</h3>
+                            <!-- Map A Filters -->
+                            <div class="flex gap-2">
+                                <button onclick="filterMapElements(event, 'A', 'all')" class="map-filter-A active px-3 py-1 rounded-full text-xs font-bold border border-blue-600 bg-blue-600 text-white transition-colors shadow-sm">전체</button>
+                                <button onclick="filterMapElements(event, 'A', 1)" class="map-filter-A px-3 py-1 rounded-full text-xs font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">1일차</button>
+                                <button onclick="filterMapElements(event, 'A', 2)" class="map-filter-A px-3 py-1 rounded-full text-xs font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">2일차</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 text-xs font-bold bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#ef4444]"></span>1일차 경로</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3b82f6]"></span>2일차 경로</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl shadow-lg relative border border-slate-200">
+                        <div id="map-planA" class="map-container"></div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-300 border-dashed">
+
+                <!-- Map Plan B -->
+                <div>
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <h3 class="text-xl font-bold text-emerald-800"><i class="fa-solid fa-map-location-dot mr-2"></i>Plan B. 2박 3일 동선</h3>
+                            <!-- Map B Filters -->
+                            <div class="flex gap-2">
+                                <button onclick="filterMapElements(event, 'B', 'all')" class="map-filter-B active px-3 py-1 rounded-full text-xs font-bold border border-emerald-600 bg-emerald-600 text-white transition-colors shadow-sm">전체</button>
+                                <button onclick="filterMapElements(event, 'B', 1)" class="map-filter-B px-3 py-1 rounded-full text-xs font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">1일차</button>
+                                <button onclick="filterMapElements(event, 'B', 2)" class="map-filter-B px-3 py-1 rounded-full text-xs font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">2일차</button>
+                                <button onclick="filterMapElements(event, 'B', 3)" class="map-filter-B px-3 py-1 rounded-full text-xs font-bold border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">3일차</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 text-xs font-bold bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#ef4444]"></span>1일차</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#10b981]"></span>2일차</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3b82f6]"></span>3일차</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded-xl shadow-lg relative border border-slate-200">
+                        <div id="map-planB" class="map-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Curation (단일 영상 탑재) -->
+    <section id="video" class="py-16 bg-slate-900 text-white border-t border-slate-800">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-10">
+                <span class="text-indigo-400 font-bold text-sm tracking-wider">Preview of Seoul</span>
+                <h2 class="text-3xl font-extrabold mt-2">서울 맛보기 : 다이나믹 서울</h2>
+                <p class="text-slate-400 mt-3 text-sm">성공적인 행사에 대한 확신을 드릴 수 있도록, 전통과 현대가 어우러진 글로벌 도시 서울의 다채로운 모습을 준비했습니다.</p>
+            </div>
+            
+            <div class="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
+                <div class="aspect-video w-full relative">
+                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/J_usDIKwoFw" title="Seoul Promotional Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="p-6 md:p-8 text-center bg-slate-800">
+                    <h3 class="font-bold text-xl mt-2 text-white">과거의 지혜와 미래의 비전이 공존하는 교육 현장</h3>
+                    <p class="text-sm text-slate-400 mt-3 max-w-2xl mx-auto leading-relaxed">학생들에게 넓은 시야를 선사하는 소중한 경험이 될 것입니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety & ESG Section (푸터 위로 이동) -->
+    <section id="safety-esg" class="py-16 bg-slate-50 border-t border-slate-200">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-12">
+                <span class="text-blue-600 font-bold text-sm tracking-wider">Safety & ESG Management</span>
+                <h2 class="text-3xl font-extrabold text-slate-800 mt-2">긴급 대처방안 및 ESG 실천안</h2>
+                <p class="text-slate-500 mt-2 text-sm">학부모님과 선생님이 안심할 수 있는 체계적 관리와 지속가능한 여행을 약속합니다.</p>
             </div>
             
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Safety Card + T-safe24 연동 -->
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-8 shadow-xl flex flex-col justify-between">
+                <div class="bg-white border border-slate-200 rounded-xl p-8 shadow-lg flex flex-col justify-between">
                     <div>
-                        <div class="flex items-center gap-3 mb-6 border-b border-slate-600 pb-4">
-                            <div class="w-10 h-10 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-truck-medical"></i></div>
-                            <h3 class="text-xl font-bold text-white">긴급상황 3단계 대처 매뉴얼</h3>
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                            <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-truck-medical"></i></div>
+                            <h3 class="text-xl font-bold text-slate-800">긴급상황 3단계 대처 매뉴얼</h3>
                         </div>
                         <ul class="space-y-5 mb-8">
                             <li class="flex items-start gap-3">
-                                <span class="bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded font-bold mt-0.5">예방</span>
-                                <p class="text-sm text-slate-300 leading-relaxed"><strong>전 차량 사전 점검:</strong> 매일 아침 전세버스 기사 음주측정 및 차량 소방/안전장비 점검, 학생 전원 탑승 시 안전벨트 착용 확인 의무화.</p>
+                                <span class="bg-slate-200 text-slate-700 text-xs px-2 py-1 rounded font-bold mt-0.5">예방</span>
+                                <p class="text-sm text-slate-600 leading-relaxed"><strong>전 차량 사전 점검:</strong> 매일 아침 전세버스 기사 음주측정 및 차량 소방/안전장비 점검, 학생 전원 탑승 시 안전벨트 착용 확인 의무화.</p>
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="bg-red-900 text-red-200 text-xs px-2 py-1 rounded font-bold mt-0.5">대응</span>
-                                <p class="text-sm text-slate-300 leading-relaxed"><strong>인근 병원 핫라인:</strong> 잠실권(서울아산병원), 대학로권(서울대병원) 등 동선별 응급의료센터 사전 파악. 발생 시 투어메이커 매니저가 1차 전담.</p>
+                                <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold mt-0.5">대응</span>
+                                <p class="text-sm text-slate-600 leading-relaxed"><strong>인근 병원 핫라인:</strong> 잠실권(서울아산병원), 대학로권(서울대병원) 등 동선별 응급의료센터 사전 파악. 발생 시 투어메이커 매니저가 1차 전담.</p>
                             </li>
                             <li class="flex items-start gap-3">
-                                <span class="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded font-bold mt-0.5">보고</span>
-                                <p class="text-sm text-slate-300 leading-relaxed"><strong>24시간 비상연락망:</strong> 인솔 교사 ↔ 투어메이커 현장 총괄 ↔ 학교 측 실시간 소통 채널 유지 및 사후 보험 처리 지원.</p>
+                                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded font-bold mt-0.5">보고</span>
+                                <p class="text-sm text-slate-600 leading-relaxed"><strong>24시간 비상연락망:</strong> 인솔 교사 ↔ 투어메이커 현장 총괄 ↔ 학교 측 실시간 소통 채널 유지 및 사후 보험 처리 지원.</p>
                             </li>
                         </ul>
                     </div>
                     <!-- T-safe24 버튼 -->
-                    <a href="https://indadady.github.io/T-safe24/" target="_blank" class="block w-full bg-slate-700 hover:bg-red-600 text-white border border-slate-600 hover:border-red-500 rounded-lg p-4 text-center transition-all duration-300 group">
+                    <a href="https://indadady.github.io/T-safe24/" target="_blank" class="block w-full bg-slate-800 hover:bg-red-600 text-white rounded-lg p-4 text-center transition-all duration-300 group shadow-md">
                         <div class="flex items-center justify-center gap-2">
                             <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-red-600 transition-colors">
                                 <i class="fa-solid fa-shield-heart"></i>
@@ -461,24 +727,24 @@
                     </a>
                 </div>
 
-                <!-- ESG Dashboard (사북중 예시 이미지를 함백고 버전으로 완벽 코딩 구현) -->
-                <div class="bg-[#ebfbf1] rounded-2xl p-8 shadow-xl border border-emerald-100 relative overflow-hidden flex flex-col justify-center">
-                    <div class="absolute top-0 right-0 opacity-20 text-9xl transform translate-x-8 -translate-y-8 pointer-events-none">🌍</div>
+                <!-- ESG Dashboard (Light Theme) -->
+                <div class="bg-[#ebfbf1] rounded-2xl p-8 shadow-lg border border-emerald-200 relative overflow-hidden flex flex-col justify-center">
+                    <div class="absolute top-0 right-0 opacity-10 text-9xl transform translate-x-8 -translate-y-8 pointer-events-none">🌍</div>
                     
                     <div class="text-center mb-8 relative z-10">
-                        <span class="inline-block bg-[#d1f4e0] text-[#166534] text-xs px-3 py-1 rounded-full font-bold mb-2">
+                        <span class="inline-block bg-white text-[#166534] border border-[#166534]/20 text-xs px-3 py-1 rounded-full font-bold mb-2 shadow-sm">
                             <i class="fa-solid fa-leaf"></i> Eco-Friendly Tour
                         </span>
-                        <h3 class="text-2xl font-extrabold text-slate-800 flex items-center justify-center gap-2">
+                        <h3 class="text-2xl font-extrabold text-slate-800 flex items-center justify-center gap-2 mt-2">
                             📊 ESG 실천 대시보드
                         </h3>
-                        <p class="text-[#15803d] font-bold text-sm mt-1">🌿 함백고등학교와 함께하는 ESG 실천 성과</p>
+                        <p class="text-[#15803d] font-bold text-sm mt-2">🌿 함백고등학교와 함께하는 ESG 실천 성과</p>
                     </div>
 
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-emerald-50 relative z-10">
                         <p class="text-center text-slate-700 text-sm mb-8 leading-relaxed font-medium">
-                            종이 일정표 대신 본 스마트 가이드북을 선택한 오늘,<br>
-                            우리는 <span class="text-[#15803d] font-bold border-b-2 border-[#15803d]">1인당 평균 아래의 자원을 절감</span>하며 숲과 지구를 보호하는 데 동참했습니다.
+                            종이 일정표 대신 본 스마트 제안서를 채택해주신 오늘,<br>
+                            우리는 <span class="text-[#15803d] font-bold border-b-2 border-[#15803d]">1인당 평균 아래의 자원을 절감</span>하며 지구를 보호하는 데 동참했습니다.
                         </p>
                         
                         <div class="grid grid-cols-3 gap-3 md:gap-4">
@@ -513,74 +779,11 @@
         </div>
     </section>
 
-    <!-- Map Section (Split into Plan A / Plan B) -->
-    <section id="map-section" class="py-16 bg-slate-50">
-        <div class="container mx-auto px-4 max-w-5xl">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-extrabold text-slate-800">방문지 상세 동선 (Map)</h2>
-                <p class="text-slate-500 mt-2 text-sm">각 플랜별 이동 경로와 방문지를 지도에서 직접 확인해보세요.</p>
-                
-                <div class="inline-flex bg-slate-200 p-1 rounded-xl shadow-inner mt-6">
-                    <button id="btn-map-planA" class="tab-btn-map active px-6 py-2 rounded-lg font-bold text-sm transition-all duration-200 w-32" onclick="switchMapTab('planA')">1박 2일 동선</button>
-                    <button id="btn-map-planB" class="tab-btn-map text-slate-500 px-6 py-2 rounded-lg font-bold text-sm transition-all duration-200 w-32" onclick="switchMapTab('planB')">2박 3일 동선</button>
-                </div>
-            </div>
-            
-            <div class="bg-white p-2 rounded-xl shadow-md relative">
-                <!-- Map A Container -->
-                <div id="map-wrapper-planA" class="block">
-                    <div id="map-planA" class="map-container"></div>
-                </div>
-                <!-- Map B Container -->
-                <div id="map-wrapper-planB" class="hidden">
-                    <div id="map-planB" class="map-container"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Video Curation (서울 홍보 영상 포함) -->
-    <section id="video" class="py-16 bg-slate-900 text-white border-t border-slate-800">
-        <div class="container mx-auto px-4 max-w-5xl">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-extrabold">사전 답사 영상자료</h2>
-                <p class="text-slate-400 mt-3 text-sm">학생들이 경험하게 될 장소들의 분위기를 미리 확인해 보세요.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Video 1: Seoul Promo -->
-                <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                    <div class="aspect-video">
-                        <!-- 제공해주신 서울 홍보 영상 -->
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/J_usDIKwoFw" title="Seoul Promotional Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="p-4">
-                        <span class="bg-indigo-600 text-white text-[10px] px-2 py-1 rounded font-bold">공통 추천</span>
-                        <h3 class="font-bold mt-2">다이나믹 서울 (Dynamic Seoul)</h3>
-                        <p class="text-xs text-slate-400 mt-1">전통과 현대가 어우러진 글로벌 문화 도시 서울의 매력을 영상으로 먼저 만나봅니다.</p>
-                    </div>
-                </div>
-
-                <!-- Video 2: Musical (Plan A Focus, but good for overall impression) -->
-                <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
-                    <div class="aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/5T2k-f2T0f0?si=p0jG4X0VpS0x1O2N" title="Charlotte Theater" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="p-4">
-                        <span class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold">Plan A</span>
-                        <h3 class="font-bold mt-2">대형 뮤지컬 관람의 감동</h3>
-                        <p class="text-xs text-slate-400 mt-1">대한민국 최초 뮤지컬 전용 극장 샤롯데씨어터의 압도적인 스케일을 체감해보세요.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
-    <footer class="bg-[#f8f9fa] py-12 border-t border-slate-200">
+    <footer class="bg-white py-12 border-t border-slate-200">
         <div class="container mx-auto px-4 text-center">
             <div class="flex flex-col items-center justify-center mb-6">
-                <a href="http://tourmaker.kr" target="_blank" class="inline-block bg-white border border-slate-300 rounded-xl px-6 py-3 hover:shadow-md transition-shadow">
+                <a href="http://tourmaker.kr" target="_blank" class="inline-block bg-slate-50 border border-slate-300 rounded-xl px-6 py-3 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="Tourmaker" class="h-6">
                         <span class="text-sm font-bold text-slate-700">홈페이지 방문 <i class="fa-solid fa-chevron-right text-xs"></i></span>
@@ -733,7 +936,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 상세일정 탭 (기존 유지)
+        // 상세일정 텍스트 탭 (A/B 플랜)
         function switchPlanTab(plan) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active', 'bg-blue-600', 'bg-emerald-600', 'text-white');
@@ -753,12 +956,47 @@
                 btn.classList.remove('text-slate-500');
             }
             content.classList.remove('hidden');
+            
+            // 탭 이동 시 내부 일정카드 필터를 '전체보기'로 리셋
+            resetScheduleFilterDays(plan);
+        }
+        
+        // 일정표 날짜별 텍스트 카드 필터링 기능
+        function filterScheduleDays(evt, plan, day) {
+            const color = plan === 'A' ? 'blue' : 'emerald';
+            
+            document.querySelectorAll(`.day-filter-${plan}`).forEach(btn => {
+                btn.classList.remove('active', `bg-${color}-600`, 'text-white', `border-${color}-600`);
+                btn.classList.add('bg-white', 'text-slate-500', 'border-slate-200');
+            });
+            
+            const clickedBtn = evt.currentTarget;
+            clickedBtn.classList.remove('bg-white', 'text-slate-500', 'border-slate-200');
+            clickedBtn.classList.add('active', `bg-${color}-600`, 'text-white', `border-${color}-600`);
+
+            document.querySelectorAll(`.day-card-${plan}`).forEach(card => {
+                if (day === 'all' || card.classList.contains(`day-card-${plan}-${day}`)) {
+                    card.style.display = 'flex';
+                    card.classList.remove('animate-fade-in-up');
+                    void card.offsetWidth; 
+                    card.classList.add('animate-fade-in-up');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // 플랜 전환 시 텍스트 카드 필터 상태 초기화
+        function resetScheduleFilterDays(plan) {
+            const firstBtn = document.querySelector(`.day-filter-${plan}`);
+            if (firstBtn) {
+                const event = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+                firstBtn.dispatchEvent(event);
+            }
         }
 
-        // 비교 탭에서 버튼 누를 시 스크롤 + 맵도 맞춰서 변경
         function openPlan(plan) {
             switchPlanTab(plan);
-            switchMapTab(plan); // 맵 탭도 동기화
             setTimeout(() => {
                 document.getElementById('schedule').scrollIntoView({ behavior: 'smooth' });
             }, 100);
@@ -774,36 +1012,36 @@
         }
 
         // ==========================================
-        // 맵 로직 분리 (Plan A / Plan B)
+        // 맵 로직 (분리된 2개의 섹션, 일자별 필터 렌더링)
         // ==========================================
         let mapA, mapB;
-        let mapInitedA = false, mapInitedB = false;
+        let layerGroupA, layerGroupB;
+        let mapsInitialized = false;
 
         const spots = {
-            school: [37.2407, 128.7188], // 함백고
-            sac: [37.4792, 127.0118], // 예술의 전당
-            jamsil: [37.5133, 127.1001], // 롯데월드 & 아쿠아리움 & 애슐리잠실
-            charlotte: [37.5112, 127.0981], // 샤롯데씨어터
-            hotel: [37.4655, 127.1428], // 밀리토피아 호텔
-            jongmyo: [37.5746, 126.9940], // 종묘
-            daehangno: [37.5815, 127.0028], // 애슐리 대학로 & JTN아트홀
-            museum: [37.5240, 126.9804], // 국립중앙박물관
-            bukchon: [37.5826, 126.9835], // 북촌
-            dadam: [37.4735, 127.1420] // 다담샤브샤브 위례
+            school: { loc: [37.2407, 128.7188], name: '함백고등학교', icon: '🏫' },
+            sac: { loc: [37.4792, 127.0118], name: '예술의전당', icon: '🎨' },
+            jamsil: { loc: [37.5133, 127.1001], name: '롯데권역(아쿠아리움/월드)', icon: '🎢' },
+            charlotte: { loc: [37.5112, 127.0981], name: '샤롯데씨어터', icon: '🎭' },
+            hotel: { loc: [37.4655, 127.1428], name: '밀리토피아 호텔', icon: '🏨' },
+            jongmyo: { loc: [37.5746, 126.9940], name: '종묘', icon: '🏛️' },
+            daehangno: { loc: [37.5815, 127.0028], name: '대학로 (JTN아트홀)', icon: '🎭' },
+            museum: { loc: [37.5240, 126.9804], name: '국립중앙박물관', icon: '🏺' },
+            bukchon: { loc: [37.5826, 126.9835], name: '북촌한옥마을', icon: '🏘️' },
+            dadam: { loc: [37.4735, 127.1420], name: '다담샤브 위례점', icon: '🍲' }
         };
 
-        const createMarker = (mapInstance, latlng, title, iconHtml, color) => {
+        const createMarker = (group, spotObj, color) => {
             const icon = L.divIcon({
                 className: 'custom-icon',
-                html: `<div style="background-color:${color}; width:30px; height:30px; border-radius:50%; border:2px solid white; color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">${iconHtml}</div>`,
+                html: `<div style="background-color:${color}; width:30px; height:30px; border-radius:50%; border:2px solid white; color:white; display:flex; align-items:center; justify-content:center; font-size:12px;">${spotObj.icon}</div>`,
                 iconSize: [30, 30]
             });
-            L.marker(latlng, {icon: icon}).addTo(mapInstance).bindPopup(`<b style="font-family:'Noto Sans KR', sans-serif;">${title}</b>`);
+            L.marker(spotObj.loc, {icon: icon}).addTo(group).bindPopup(`<b style="font-family:'Noto Sans KR', sans-serif;">${spotObj.name}</b>`);
         };
 
-        const drawAnimatedPolyline = (mapInstance, routeArray, color) => {
-            const polyline = L.polyline(routeArray, { color: color, weight: 4, opacity: 0.8 }).addTo(mapInstance);
-            // 맵 타일 렌더링 후 애니메이션 적용
+        const drawRoute = (group, routeArray, color, delayMs) => {
+            const polyline = L.polyline(routeArray, { color: color, weight: 4, opacity: 0.85 }).addTo(group);
             setTimeout(() => {
                 if(polyline._path) {
                     const length = polyline._path.getTotalLength();
@@ -811,93 +1049,161 @@
                     polyline._path.style.strokeDashoffset = length;
                     polyline._path.classList.add('animated-path');
                 }
-            }, 300);
+            }, delayMs);
         };
 
-        function initMapA() {
-            if(mapInitedA) return;
-            mapInitedA = true;
-            mapA = L.map('map-planA', { scrollWheelZoom:false });
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapA);
-
-            createMarker(mapA, spots.school, '함백고등학교 (출발)', '🏫', '#64748b');
-            createMarker(mapA, spots.sac, '예술의전당', '🎨', '#3b82f6');
-            createMarker(mapA, spots.jamsil, '롯데권역 (아쿠아리움/애슐리/롯데월드)', '🎢', '#3b82f6');
-            createMarker(mapA, spots.charlotte, '샤롯데씨어터', '🎭', '#3b82f6');
-            createMarker(mapA, spots.hotel, '밀리토피아 호텔', '🏨', '#1e40af');
-
-            const routeA = [spots.school, spots.sac, spots.jamsil, spots.charlotte, spots.hotel];
-            drawAnimatedPolyline(mapA, routeA, '#3b82f6');
+        // 지도 동선 렌더링 함수 (일자별 필터 적용)
+        function renderMapA(day) {
+            layerGroupA.clearLayers();
+            let bounds = [];
             
-            mapA.fitBounds(L.latLngBounds([spots.sac, spots.jamsil, spots.hotel]), { padding: [40, 40] });
+            const day1Spots = [spots.school, spots.sac, spots.jamsil, spots.charlotte, spots.hotel];
+            const day2Spots = [spots.hotel, spots.jamsil, spots.school];
+            
+            let spotsToDraw = [];
+            
+            if (day === 'all' || day === 1) {
+                spotsToDraw = spotsToDraw.concat(day1Spots);
+                drawRoute(layerGroupA, day1Spots.map(s => s.loc), '#ef4444', day === 'all' ? 100 : 100);
+            }
+            if (day === 'all' || day === 2) {
+                spotsToDraw = spotsToDraw.concat(day2Spots);
+                drawRoute(layerGroupA, day2Spots.map(s => s.loc), '#3b82f6', day === 'all' ? 2000 : 100);
+            }
+
+            // 중복 마커 제거
+            const uniqueSpots = Array.from(new Set(spotsToDraw.map(s => s.name))).map(name => {
+                return spotsToDraw.find(s => s.name === name);
+            });
+
+            uniqueSpots.forEach(s => {
+                createMarker(layerGroupA, s, '#3b82f6'); // 기본 파란색 마커 톤 통일
+                bounds.push(s.loc);
+            });
+
+            // 포커싱 조절
+            if(bounds.length > 0) {
+                mapA.fitBounds(L.latLngBounds(bounds), { padding: [40, 40] });
+            }
         }
 
-        function initMapB() {
-            if(mapInitedB) return;
-            mapInitedB = true;
-            mapB = L.map('map-planB', { scrollWheelZoom:false });
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapB);
-
-            createMarker(mapB, spots.school, '함백고등학교 (출발)', '🏫', '#64748b');
-            createMarker(mapB, spots.sac, '예술의전당', '🎨', '#10b981');
-            createMarker(mapB, spots.jongmyo, '종묘', '🏛️', '#10b981');
-            createMarker(mapB, spots.daehangno, '대학로 (JTN아트홀/애슐리)', '🎭', '#10b981');
-            createMarker(mapB, spots.museum, '국립중앙박물관', '🏺', '#10b981');
-            createMarker(mapB, spots.bukchon, '북촌한옥마을', '🏘️', '#10b981');
-            createMarker(mapB, spots.dadam, '다담샤브 위례점', '🍲', '#10b981');
-            createMarker(mapB, spots.jamsil, '롯데월드', '🎢', '#10b981');
-            createMarker(mapB, spots.hotel, '밀리토피아 호텔', '🏨', '#047857');
-
-            const routeB = [spots.school, spots.sac, spots.jongmyo, spots.daehangno, spots.hotel, spots.museum, spots.bukchon, spots.dadam, spots.hotel, spots.jamsil];
-            drawAnimatedPolyline(mapB, routeB, '#10b981');
+        function renderMapB(day) {
+            layerGroupB.clearLayers();
+            let bounds = [];
             
-            mapB.fitBounds(L.latLngBounds([spots.sac, spots.daehangno, spots.bukchon, spots.hotel]), { padding: [40, 40] });
+            const day1Spots = [spots.school, spots.sac, spots.jongmyo, spots.daehangno, spots.hotel];
+            const day2Spots = [spots.hotel, spots.museum, spots.bukchon, spots.dadam, spots.hotel];
+            const day3Spots = [spots.hotel, spots.jamsil, spots.school];
+            
+            let spotsToDraw = [];
+            
+            if (day === 'all' || day === 1) {
+                spotsToDraw = spotsToDraw.concat(day1Spots);
+                drawRoute(layerGroupB, day1Spots.map(s => s.loc), '#ef4444', day === 'all' ? 100 : 100);
+            }
+            if (day === 'all' || day === 2) {
+                spotsToDraw = spotsToDraw.concat(day2Spots);
+                drawRoute(layerGroupB, day2Spots.map(s => s.loc), '#10b981', day === 'all' ? 1500 : 100);
+            }
+            if (day === 'all' || day === 3) {
+                spotsToDraw = spotsToDraw.concat(day3Spots);
+                drawRoute(layerGroupB, day3Spots.map(s => s.loc), '#3b82f6', day === 'all' ? 3000 : 100);
+            }
+
+            const uniqueSpots = Array.from(new Set(spotsToDraw.map(s => s.name))).map(name => {
+                return spotsToDraw.find(s => s.name === name);
+            });
+
+            uniqueSpots.forEach(s => {
+                createMarker(layerGroupB, s, '#10b981'); // 기본 에메랄드색 마커 톤 통일
+                bounds.push(s.loc);
+            });
+
+            if(bounds.length > 0) {
+                mapB.fitBounds(L.latLngBounds(bounds), { padding: [40, 40] });
+            }
         }
 
-        function switchMapTab(plan) {
-            document.querySelectorAll('.tab-btn-map').forEach(btn => {
-                btn.classList.remove('active', 'bg-slate-700', 'text-white');
-                btn.classList.add('text-slate-500');
+        // 지도 탭 버튼 클릭 이벤트
+        function filterMapElements(evt, plan, day) {
+            const color = plan === 'A' ? 'blue' : 'emerald';
+            
+            document.querySelectorAll(`.map-filter-${plan}`).forEach(btn => {
+                btn.classList.remove('active', `bg-${color}-600`, 'text-white', `border-${color}-600`);
+                btn.classList.add('bg-white', 'text-slate-500', 'border-slate-200');
             });
             
-            document.getElementById('map-wrapper-planA').classList.add('hidden');
-            document.getElementById('map-wrapper-planB').classList.add('hidden');
+            const clickedBtn = evt.currentTarget;
+            clickedBtn.classList.remove('bg-white', 'text-slate-500', 'border-slate-200');
+            clickedBtn.classList.add('active', `bg-${color}-600`, 'text-white', `border-${color}-600`);
 
-            const btn = document.getElementById(`btn-map-${plan}`);
-            btn.classList.add('active', 'bg-slate-700', 'text-white');
-            btn.classList.remove('text-slate-500');
-            
-            document.getElementById(`map-wrapper-${plan}`).classList.remove('hidden');
-            document.getElementById(`map-wrapper-${plan}`).classList.add('block');
-
-            // 숨겨져 있던 맵이 나타날 때 사이즈 재계산이 필수적임
-            setTimeout(() => {
-                if(plan === 'planA') {
-                    if(!mapInitedA) initMapA();
-                    else mapA.invalidateSize();
-                } else {
-                    if(!mapInitedB) initMapB();
-                    else mapB.invalidateSize();
-                }
-            }, 100);
+            if(plan === 'A') {
+                renderMapA(day);
+            } else {
+                renderMapB(day);
+            }
         }
 
-        // 스크롤 옵저버: 지도 섹션 진입 시 현재 활성화된 맵 초기화
+        function initMaps() {
+            if(mapsInitialized) return;
+            mapsInitialized = true;
+
+            // --- Map A (1박 2일) ---
+            mapA = L.map('map-planA', { scrollWheelZoom:false });
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapA);
+            layerGroupA = L.featureGroup().addTo(mapA);
+
+            // --- Map B (2박 3일) ---
+            mapB = L.map('map-planB', { scrollWheelZoom:false });
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapB);
+            layerGroupB = L.featureGroup().addTo(mapB);
+
+            // 최초 전체 렌더링
+            renderMapA('all');
+            renderMapB('all');
+        }
+
+        // 스크롤 시 맵 초기화
         const ioMap = new IntersectionObserver((entries)=>{
             if(entries[0].isIntersecting) { 
-                // 기본으로 Plan A 맵 로드
-                if(!document.getElementById('map-wrapper-planA').classList.contains('hidden')) {
-                    initMapA();
-                } else {
-                    initMapB();
-                }
+                initMaps();
                 ioMap.disconnect(); 
             }
         }, { threshold: 0.1 });
         ioMap.observe(document.getElementById('map-section'));
 
-        // 최초 세팅
+
+        // ==========================================
+        // D-Day 계산 로직 (기준일: 2026년 10월 14일)
+        // ==========================================
+        function initDday() {
+            const targetDate = new Date('2026-10-14T00:00:00+09:00');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            targetDate.setHours(0, 0, 0, 0);
+
+            const diffTime = targetDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const badge = document.getElementById('d-day-badge');
+            if(badge) {
+                if (diffDays > 0) {
+                    badge.textContent = `D-${diffDays}`;
+                } else if (diffDays === 0) {
+                    badge.textContent = 'D-DAY';
+                    badge.classList.replace('bg-blue-600', 'bg-red-600');
+                    badge.classList.add('animate-pulse');
+                } else {
+                    badge.textContent = `D+${Math.abs(diffDays)}`;
+                    badge.classList.replace('bg-blue-600', 'bg-slate-600');
+                }
+                badge.classList.remove('hidden');
+            }
+        }
+
+        // 초기화 실행
         switchPlanTab('planA');
+        initDday();
     </script>
 </body>
 </html>
